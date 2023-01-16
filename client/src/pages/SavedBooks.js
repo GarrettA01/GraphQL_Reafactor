@@ -1,12 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
+import React, { useEffect } from "react";
+import {
+  Jumbotron,
+  Container,
+  CardColumns,
+  Card,
+  Button,
+} from "react-bootstrap";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_ME } from "../utils/queries";
+import { REMOVE_BOOK } from "../utils/mutations";
+import { getMe } from "../utils/API";
+import Auth from "../utils/auth";
+import { removeBookId } from "../utils/localStorage";
 
-import { getMe, deleteBook } from '../utils/API';
-import Auth from '../utils/auth';
-import { removeBookId } from '../utils/localStorage';
-
+// Remove the useState() Hook that sets the state for UserData.
+// Instead, use the useQuery() Hook to execute the GET_ME query on load and save it to a variable named userData.
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useQuery(GET_ME);
+  const [removeBook] = useMutation(REMOVE_BOOK);
 
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
@@ -23,7 +34,7 @@ const SavedBooks = () => {
         const response = await getMe(token);
 
         if (!response.ok) {
-          throw new Error('something went wrong!');
+          throw new Error("something went wrong!");
         }
 
         const user = await response.json();
@@ -34,7 +45,7 @@ const SavedBooks = () => {
     };
 
     getUserData();
-  }, [userDataLength]);
+  }, [userDataLength, setUserData]);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -45,13 +56,15 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await deleteBook(bookId, token);
+      const { data } = await removeBook({
+        variables: { bookId },
+      });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
+      if (!data.ok) {
+        throw new Error("something went wrong!");
       }
 
-      const updatedUser = await response.json();
+      const updatedUser = await data.json();
       setUserData(updatedUser);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
@@ -67,7 +80,7 @@ const SavedBooks = () => {
 
   return (
     <>
-      <Jumbotron fluid className='text-light bg-dark'>
+      <Jumbotron fluid className="text-light bg-dark">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
@@ -75,19 +88,30 @@ const SavedBooks = () => {
       <Container>
         <h2>
           {userData.savedBooks.length
-            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
-            : 'You have no saved books!'}
+            ? `Viewing ${userData.savedBooks.length} saved ${
+                userData.savedBooks.length === 1 ? "book" : "books"
+              }:`
+            : "You have no saved books!"}
         </h2>
         <CardColumns>
           {userData.savedBooks.map((book) => {
             return (
-              <Card key={book.bookId} border='dark'>
-                {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
+              <Card key={book.bookId} border="dark">
+                {book.image ? (
+                  <Card.Img
+                    src={book.image}
+                    alt={`The cover for ${book.title}`}
+                    variant="top"
+                  />
+                ) : null}
                 <Card.Body>
                   <Card.Title>{book.title}</Card.Title>
-                  <p className='small'>Authors: {book.authors}</p>
+                  <p className="small">Authors: {book.authors}</p>
                   <Card.Text>{book.description}</Card.Text>
-                  <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
+                  <Button
+                    className="btn-block btn-danger"
+                    onClick={() => handleDeleteBook(book.bookId)}
+                  >
                     Delete this Book!
                   </Button>
                 </Card.Body>
