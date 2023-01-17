@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../utils/mutations";
-// import { createUser } from "../utils/API";
+// import { createUser } from '../utils/API';
 import Auth from "../utils/auth";
 
 // Replace the createUser() functionality imported from the API file with the ADD_USER mutation functionality.
@@ -49,19 +49,6 @@ const SignupForm = () => {
         variables: { ...userFormData },
       });
 
-      //   if (!data.ok) {
-      //     throw new Error("something went wrong!");
-      //   }
-
-      //   const { token, user } = await data.json();
-      //   console.log(user);
-      //   Auth.login(token);
-      // } catch (err) {
-      //   console.error(err);
-      //   setShowAlert(true);
-      // }
-
-      // same as loginform, login with adduser, grab values from mutation
       Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);

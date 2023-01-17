@@ -11,7 +11,7 @@ import {
 import { useMutation } from "@apollo/client";
 import { SAVE_BOOK } from "../utils/mutations";
 import Auth from "../utils/auth";
-// import { searchGoogleBooks } from "../utils/API";
+// import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
 const SearchBooks = () => {
@@ -82,6 +82,7 @@ const SearchBooks = () => {
       // saveBook(bookToSave, token)
       // Use the Apollo useMutation() Hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from the API file.
       const { data } = await saveBook({
+        // newBook from savebook typeDef
         variables: { newBook: { ...bookToSave } },
       });
 
