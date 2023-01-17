@@ -51,4 +51,4 @@ N/A
 ## Contact
 
 For additional information, contact me at my github:
-github.com/GarrettA01 or email me at gman.anderson2001@gmail.com!
+www.github.com/GarrettA01 or email me at gman.anderson2001@gmail.com!
