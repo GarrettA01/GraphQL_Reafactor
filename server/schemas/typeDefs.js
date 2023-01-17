@@ -4,18 +4,18 @@ const typeDefs = gql`
   type User {
     _id: ID!
     username: String!
-    email: String!
+    email: String
     bookCount: Int
-    savedBooks: [Book]
+    savedBooks: [Book]!
   }
 
   type Book {
-    bookId: String!
-    authors: [String!]
-    description: String!
-    title: String!
-    image: String!
-    link: String!
+    bookId: ID
+    authors: [String]
+    description: String
+    title: String
+    image: String
+    link: String
   }
 
   input BookData {
@@ -28,7 +28,7 @@ const typeDefs = gql`
   }
 
   type Auth {
-    token: ID!
+    token: ID
     user: User
   }
 
