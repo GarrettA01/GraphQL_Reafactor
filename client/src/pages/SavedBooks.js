@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Jumbotron,
   Container,
@@ -7,10 +7,10 @@ import {
   Button,
 } from "react-bootstrap";
 import Auth from "../utils/auth";
+import { removeBookId } from "../utils/localStorage";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { REMOVE_BOOK } from "../utils/mutations";
-import { removeBookId } from "../utils/localStorage";
 
 // Remove the useState() Hook that sets the state for UserData.
 // Instead, use the useQuery() Hook to execute the GET_ME query on load and save it to a variable named userData.

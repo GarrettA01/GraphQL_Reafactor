@@ -40,6 +40,7 @@ const SearchBooks = () => {
     }
 
     try {
+      // removes the need for the api util
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${searchInput}`
       );
