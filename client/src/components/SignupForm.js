@@ -5,6 +5,8 @@ import { ADD_USER } from "../utils/mutations";
 // import { createUser } from "../utils/API";
 import Auth from "../utils/auth";
 
+// Replace the createUser() functionality imported from the API file with the ADD_USER mutation functionality.
+
 const SignupForm = () => {
   // set initial form state
   const [userFormData, setUserFormData] = useState({
@@ -17,7 +19,16 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-  const [addUser] = useMutation(ADD_USER);
+  const [addUser, { error }] = useMutation(ADD_USER);
+
+  useEffect(() => {
+    if (error) {
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }, [error]);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
@@ -38,16 +49,22 @@ const SignupForm = () => {
         variables: { ...userFormData },
       });
 
-      if (!data.ok) {
-        throw new Error("something went wrong!");
-      }
+      //   if (!data.ok) {
+      //     throw new Error("something went wrong!");
+      //   }
 
-      const { token, user } = await data.json();
-      console.log(user);
-      Auth.login(token);
+      //   const { token, user } = await data.json();
+      //   console.log(user);
+      //   Auth.login(token);
+      // } catch (err) {
+      //   console.error(err);
+      //   setShowAlert(true);
+      // }
+
+      // same as loginform, login with adduser, grab values from mutation
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
     }
 
     setUserFormData({
